@@ -1,5 +1,5 @@
 {
-    "name": "temp2",
+    "name": "SenseDog Client",
     "version": "1.0.0",
     "main": "pages/index.js",
     "scripts": {

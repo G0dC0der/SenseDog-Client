@@ -32,23 +32,3 @@ function watch(){
         ()=>{hmr = new HotModuleReloader()}, true)
     } else { setTimeout(watch, 5000) }
 }
-// CODE USED TO PROTOTYPE SEQUENTIAL LOADER
-// 
-// var inter = 1;
-// load('1',
-// load('2',
-// load('3',
-// load('4',
-// load('5', initialize )))), 'start');
-// function load(src, callback, mode){
-//     if (mode === 'start') {
-//         setTimeout(callback, 1000);
-//         console.log(inter);
-//         inter++;
-//     } else {
-//         return () => {load(src, callback, 'start')};
-//     }
-// }
-// function initialize() {
-//     console.log(inter);
-// }

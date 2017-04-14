@@ -1,0 +1,15 @@
+{
+  "main": "dist/index.js",
+  "map": {
+    "next": "./dist/next.js"
+  },
+  "format": "cjs",
+  "meta": {
+    "*.json": {
+      "format": "json"
+    },
+    "rollup.js": {
+      "format": "esm"
+    }
+  }
+}
