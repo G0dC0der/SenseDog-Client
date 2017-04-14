@@ -19,7 +19,9 @@ public class MainActivity extends AppCompatActivity {
         webView.setWebViewClient(new InternalWebClient());
         webView.setWebChromeClient(new WebChromeClient());
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("file:///android_asset/web/index.html");
+        webView.getSettings().setAllowFileAccessFromFileURLs(true);
+        webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
+        webView.loadUrl("file:///android_asset/pages/index.html");
     }
 
     @Override

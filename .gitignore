@@ -8,6 +8,6 @@
 /captures
 .externalNativeBuild
 .git
-/app/src/main/assets/src/scripts
+/app/src/main/assets/src/dist
 /app/src/main/assets/src/npm-debug.log
 /app/src/main/assets/node_modules
