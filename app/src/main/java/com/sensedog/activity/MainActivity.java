@@ -21,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setAllowFileAccessFromFileURLs(true);
         webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
-        webView.loadUrl("file:///android_asset/pages/index.html");
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.loadUrl("file:///android_asset/index.html");
     }
 
     @Override
