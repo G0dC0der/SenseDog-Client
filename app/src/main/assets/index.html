@@ -3,23 +3,24 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="css/sensedog.css" rel="stylesheet">
     </head>
-    <body ng-app="SenseDog" ng-controller="RouteStartController" ng-cloak>
+    <body ng-app="SenseDog" ng-cloak>
 
         <div ng-view></div>
 
         <!-- Angular -->
-        <script src="lib/angular.min.js"></script>
-        <script src="lib/angular-route.min.js"></script>
-        <script src="lib/underscore-min.js"></script>
+        <script src="libs/angular.min.js"></script>
+        <script src="libs/angular-route.min.js"></script>
+        <script src="libs/underscore-min.js"></script>
 
         <!-- Bootstrap -->
         <script src="app.js"></script>
 
         <!--Services -->
         <script src="services/StorageService.js"></script>
+        <script src="services/AlarmService.js"></script>
+        <script src="services/DeviceService.js"></script>
 
         <!-- Controllers -->
-        <script src="controllers/RouteStartController.js"></script>
         <script src="controllers/ChooseController.js"></script>
     </body>
 </html>

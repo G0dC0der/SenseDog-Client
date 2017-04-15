@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.sensedog.activity">
     <uses-permission android:name="android.permission.INTERNET"/>
+    <service android:name="com.sensedog.service.AlarmService"/>
 
     <application
             android:allowBackup="true"

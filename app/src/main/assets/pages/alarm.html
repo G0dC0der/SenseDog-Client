@@ -1,3 +1,9 @@
-<div>
-    Alarm
+<div ng-controller="AlarmController">
+    <div ng-if="alarmServiceRunning">
+        <button ng-click="stop()">Stop</button>
+    </div>
+
+    <div ng-if="!alarmServiceRunning">
+        <button ng-click="start()">Start</button>
+    </div>
 </div>
