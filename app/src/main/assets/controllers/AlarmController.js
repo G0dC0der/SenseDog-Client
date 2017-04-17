@@ -29,7 +29,7 @@ function AlarmController($scope, $route, StorageService, AlarmService, DeviceSer
 
         if (!alarmToken) {
             ServerService.createService({
-                cloudToken: //TODO:
+                cloudToken: null,//TODO:
                 deviceModel: DeviceService.deviceModel(),
                 osVersion: DeviceService.osVersion(),
                 appVersion: DeviceService.appVersion(),

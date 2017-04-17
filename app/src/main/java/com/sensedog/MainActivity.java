@@ -1,9 +1,10 @@
-package com.sensedog.activity;
+package com.sensedog;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+//import com.google.android.gms.common.GoogleApiAvailability;
 import com.sensedog.bind.AndroidInformationBindings;
 import com.sensedog.bind.AndroidServiceBindings;
 import com.sensedog.web.InternalWebClient;
@@ -17,9 +18,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(com.sensedog.R.layout.activity_main);
 
-        webView = (WebView) findViewById(R.id.web_view);
+//        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+//        int status = googleApiAvailability.isGooglePlayServicesAvailable(this);
+//        if(status != ConnectionResult.SUCCESS) {
+//            if(googleApiAvailability.isUserResolvableError(status)) {
+////                googleApiAvailability.getErrorDialog(this, status, 2404).show();
+//                googleApiAvailability.makeGooglePlayServicesAvailable(this);
+//            }
+//        }
+
+        webView = (WebView) findViewById(com.sensedog.R.id.web_view);
         webView.setWebViewClient(new InternalWebClient());
         webView.setWebChromeClient(new WebChromeClient());
         webView.addJavascriptInterface(new AndroidServiceBindings(this), AndroidServiceBindings.class.getSimpleName());

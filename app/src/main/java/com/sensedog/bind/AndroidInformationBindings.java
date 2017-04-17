@@ -10,7 +10,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.webkit.JavascriptInterface;
 
-import static com.sensedog.activity.MainActivity.SENSEDOG_VERSION;
+import static com.sensedog.MainActivity.SENSEDOG_VERSION;
 
 public class AndroidInformationBindings {
 
