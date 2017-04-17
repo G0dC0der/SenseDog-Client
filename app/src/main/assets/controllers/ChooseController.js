@@ -15,9 +15,9 @@ function ChooseController($scope, $location, StorageService, AlarmService) {
     /*
      * Init
      */
-    if (AlarmService.isRunning()) {
+    if (AlarmService.isRunning() || StorageService.get('alarm-auth-token')) {
         $location.path('alarm');
-    } /*else if (MasterService.isRunning()) { //TODO: Don't forget
+    } /*else if (MasterService.isRunning() || StorageService.get('master-auth-token')) { //TODO: Don't forget
         $location.path('master');
     } */else {
         var role = StorageService.get("role");

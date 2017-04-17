@@ -13,6 +13,7 @@ import com.sensedog.sensor.MovementDetector;
 import com.sensedog.sensor.RotationDetector;
 import com.sensedog.sensor.VibrationDetector;
 import com.sensedog.sensor.unit.Axis;
+import com.sensedog.sensor.unit.DetectType;
 import com.sensedog.sensor.unit.Direction;
 
 public class AlarmService extends Service {
@@ -24,9 +25,8 @@ public class AlarmService extends Service {
         rotationDetector.setThreshold(1.0f);
         rotationDetector.setDetectionCallback(new BiConsumer<Axis, Float>() {
             @Override
-            public void consume(Axis axis, Float aFloat) {
-                System.out.println(axis);
-                //Send to server.
+            public void consume(Axis axis, Float value) {
+                detect(DetectType.ROTATION, value);
             }
         });
 
@@ -34,18 +34,16 @@ public class AlarmService extends Service {
         vibrationDetector.setThreshold(10);
         vibrationDetector.setCallback(new Consumer<Float>() {
             @Override
-            public void consume(Float obj) {
-                System.out.println(obj);
-                //Send to server
+            public void consume(Float value) {
+                detect(DetectType.VIBRATION, value);
             }
         });
 
         final MovementDetector movementDetector = new MovementDetector();
         movementDetector.setCallback(new Consumer<Direction>() {
             @Override
-            public void consume(Direction obj) {
-                System.out.println(obj);
-                //Send to server
+            public void consume(Direction direction) {
+                detect(DetectType.COMPASS, direction);
             }
         });
 
@@ -60,5 +58,12 @@ public class AlarmService extends Service {
         manager.registerListener(movementDetector, magnetometer, SensorManager.SENSOR_DELAY_UI);
 
         return null;
+    }
+
+    private void detect(DetectType detectType, Object value) {
+        System.out.println(detectType + ": " + value.toString());
+        //Some logics if it's rejected.
+
+        //Check the reason. If it's no master or that the status is stopped, sleep for a minute.
     }
 }

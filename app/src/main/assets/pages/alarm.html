@@ -1,5 +1,6 @@
-<div ng-controller="AlarmController">
+<div ng-controller="AlarmController" ng-show="loaded()">
     <div ng-if="alarmServiceRunning">
+        <div>{{pinCode}}</div>
         <button ng-click="stop()">Stop</button>
     </div>
 

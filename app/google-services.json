@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "435353404195",
+    "firebase_url": "https://sensedog-server.firebaseio.com",
+    "project_id": "sensedog-server",
+    "storage_bucket": "sensedog-server.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:435353404195:android:b16c86f567d0cfc0",
+        "android_client_info": {
+          "package_name": "com.sensedog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "435353404195-01gr7okli7elj9id9o6q6rnvorda445l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCt7IyLJALtUtuWfC2lDsEXjHqmmIs__D8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
