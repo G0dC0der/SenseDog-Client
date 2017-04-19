@@ -1,17 +1,13 @@
 angular.module("SenseDog").factory('StorageService', ['$q', function($q) {
-    if (!localStorage) {
-        throw new Exception("Local Storage is undefined!");
-    }
-
     return {
         put: function (key, value) {
-            localStorage.setItem(key, value);
+            window.AndroidStorageBindings.put(key, value);
         },
         get: function (key) {
-            return localStorage.getItem(key);
+            return window.AndroidStorageBindings.get(key);
         },
         remove: function (key) {
-            localStorage.removeItem(key);
+            window.AndroidStorageBindings.remove(key);
         }
     };
 }]);

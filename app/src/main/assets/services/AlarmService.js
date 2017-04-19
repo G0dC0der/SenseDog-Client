@@ -1,13 +1,13 @@
 angular.module("SenseDog").factory('AlarmService', ['$q', function($q) {
     return {
         start: function() {
-            if (window.AndroidServiceBindings.isAlarmServiceRunning()) {
+            if (this.isRunning()) {
                 throw new Exception("Alarm service already running.");
             }
             window.AndroidServiceBindings.startAlarmService();
         },
         stop: function() {
-            if (!window.AndroidServiceBindings.isAlarmServiceRunning()) {
+            if (!this.isRunning()) {
                 throw new Exception("Alarm service not even running.");
             }
             window.AndroidServiceBindings.stopAlarmService();

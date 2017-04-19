@@ -1,4 +1,4 @@
-angular.module("SenseDog").factory('ConfigurationService', ['$q', function($q) {
+angular.module("SenseDog").factory('ConfigurationService', ['$q', '$http', function($q, $http) {
     var cache = null;
 
     return {
@@ -7,23 +7,10 @@ angular.module("SenseDog").factory('ConfigurationService', ['$q', function($q) {
                 return $q.resolve(cache);
             }
 
-            var deferred = $q.defer();
-
-            $.ajax({
-                type: "GET",
-                url: 'config.json',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (config) {
-                    cache = config;
-                    deferred.resolve(config);
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    deferred.reject(JSON.parse(jqXHR.responseText));
-                }
+            return $http.get('config.json').then(function(config){
+                cache = config;
+                return config;
             });
-
-            return deferred.promise;
         }
     };
 }]);

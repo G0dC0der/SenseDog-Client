@@ -10,14 +10,17 @@ function AlarmController($scope, $route, StorageService, AlarmService, DeviceSer
         ServerService.status(alarmToken).then(function(status){
             $scope.alarmServiceRunning = status.systemStatus === 'ACTIVE';
 
-            if ($scope.alarmServiceRunning && !AlarmService.isRunning()) {
+            if ($scope.alarmServiceRunning && !androidServiceRunning) {
                 AlarmService.start();
-            } else if (!$scope.alarmServiceRunning && AlarmService.isRunning()) {
+            } else if (!$scope.alarmServiceRunning && androidServiceRunning) {
                 AlarmService.stop();
             }
 
             $scope.loaded = true;
         });
+    } else {
+        $scope.alarmServiceRunning = false;
+        $scope.loaded = true;
     }
 
     if (!alarmToken && androidServiceRunning) {
@@ -39,15 +42,17 @@ function AlarmController($scope, $route, StorageService, AlarmService, DeviceSer
                 StorageService.put('alarm-auth-token', resp.alarmAuthToken);
                 $scope.alarmServiceRunning = true;
                 $scope.pinCode = resp.pinCode;
-            }).then(null, function(){
-                $scope.alarmServiceRunning = null;
+            }).then(null, function(err){
+                console.error('Could not start alarm service.', err);
+                $scope.alarmServiceRunning = false;
                 $scope.pinCode = "-";
                 AlarmService.stop();
             });
         } else {
             ServerService.resume(alarmToken).then(function(){
                 $scope.alarmServiceRunning = true;
-            }).then(null, function() {
+            }).then(null, function(err) {
+                console.error('Could not resume alarm service.', err);
                 $scope.alarmServiceRunning = null;
                 $scope.pinCode = "-";
                 AlarmService.stop();

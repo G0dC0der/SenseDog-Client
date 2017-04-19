@@ -9,4 +9,7 @@ angular.module('SenseDog', ['ngRoute']).config(function($routeProvider) {
     .when("/master", {
         templateUrl : "pages/master.html"
     });
-});
+}).run(["$rootScope", "$timeout", function ($rootScope, $timeout) {
+    window.$timeout = $timeout;
+    window.$rootScope = $rootScope;
+}]);

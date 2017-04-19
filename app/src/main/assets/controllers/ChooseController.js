@@ -1,34 +1,16 @@
 function ChooseController($scope, $location, StorageService, AlarmService) {
     $scope.chooseMaster = function() {
-        choose('master');
+        $location.path("master");
     };
 
     $scope.chooseAlarm = function() {
-        choose('alarm');
+        $location.path("alarm");
     };
 
-    var choose = function(role) {
-        StorageService.put("role", role);
-        $location.path(role);
-    };
-
-    /*
-     * Init
-     */
-    if (AlarmService.isRunning() || StorageService.get('alarm-auth-token')) {
-        $location.path('alarm');
-    } /*else if (MasterService.isRunning() || StorageService.get('master-auth-token')) { //TODO: Don't forget
+    if (StorageService.get("master-auth-token")) {
         $location.path('master');
-    } */else {
-        var role = StorageService.get("role");
-
-        if (role) {
-            if (role === 'master') {
-                $location.path('master');
-            } else if (role === 'alarm') {
-                $location.path('alarm');
-            }
-        }
+    } else if (StorageService.get("alarm-auth-token")) {
+        $location.path('alarm');
     }
 }
 

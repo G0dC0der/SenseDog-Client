@@ -7,6 +7,8 @@ import android.webkit.WebView;
 //import com.google.android.gms.common.GoogleApiAvailability;
 import com.sensedog.bind.AndroidInformationBindings;
 import com.sensedog.bind.AndroidServiceBindings;
+import com.sensedog.bind.AndroidStorageBindings;
+import com.sensedog.persistance.DictionaryStorage;
 import com.sensedog.web.InternalWebClient;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         webView.setWebChromeClient(new WebChromeClient());
         webView.addJavascriptInterface(new AndroidServiceBindings(this), AndroidServiceBindings.class.getSimpleName());
         webView.addJavascriptInterface(new AndroidInformationBindings(this), AndroidInformationBindings.class.getSimpleName());
+        webView.addJavascriptInterface(new AndroidStorageBindings(new DictionaryStorage(this)), AndroidStorageBindings.class.getSimpleName());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setAllowFileAccessFromFileURLs(true);
         webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
