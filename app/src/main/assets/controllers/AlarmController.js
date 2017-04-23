@@ -7,11 +7,14 @@ function AlarmController($scope, $route, StorageService, AlarmService, DeviceSer
     $scope.alarmServiceRunning;
 
     if (alarmToken) {
-        ServerService.status(alarmToken).then(function(status){
-            AlarmService.start();
+        ServerService.getStatus(alarmToken).then(function(status){
+            if (!AlarmService.isRunning()) {
+                AlarmService.start();
+            }
             $scope.alarmServiceRunning = true;
         }).then(null, function(err){
             console.error("No service is running on server.", err); //Needs better error handling.
+            //We should probably remove the auth token.
         }).then(function(){
             $scope.loaded = true;
         });
