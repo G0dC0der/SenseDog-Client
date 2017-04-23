@@ -7,11 +7,11 @@ function ChooseController($scope, $location, StorageService, AlarmService) {
         $location.path("alarm");
     };
 
-    if (StorageService.get("master-auth-token")) {
-        $location.path('master');
-    } else if (StorageService.get("alarm-auth-token")) {
-        $location.path('alarm');
-    }
+//    if (StorageService.get("master-auth-token")) {
+//        $location.path('master');
+//    } else if (StorageService.get("alarm-auth-token")) {
+//        $location.path('alarm');
+//    }
 }
 
 angular.module('SenseDog').controller('ChooseController', [

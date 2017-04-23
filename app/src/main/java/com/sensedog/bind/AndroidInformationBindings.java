@@ -47,7 +47,7 @@ public class AndroidInformationBindings {
     }
 
     @JavascriptInterface
-    public Float getBatteryLevel() {
+    public float getBatteryLevel() {
         Intent batteryIntent = activity.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
         int scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
@@ -56,7 +56,7 @@ public class AndroidInformationBindings {
             return 50.0f;
         }
 
-        return ((float)level / (float)scale) * 100.0f;
+        return (float)level / (float)scale;
     }
 
     private String capitalize(String str) {

@@ -1,10 +1,14 @@
-<div ng-controller="AlarmController" ng-show="loaded">
-    <div ng-show="alarmServiceRunning">
-        <div>{{pinCode}}</div>
-        <button ng-click="stop()">Stop</button>
+<div ng-controller="AlarmController">
+    <div ng-show="loaded">
+        <div ng-show="alarmServiceRunning">
+            <div>{{pinCode}}</div>
+            <button ng-click="destroy()">Destroy</button>
+        </div>
+
+        <div ng-show="!alarmServiceRunning">
+            <button ng-click="start()">Start</button>
+        </div>
     </div>
 
-    <div ng-show="!alarmServiceRunning">
-        <button ng-click="start()">Start</button>
-    </div>
+    <app-reset/>
 </div>

@@ -1,15 +1,15 @@
 angular.module("SenseDog").factory('ConfigurationService', ['$q', '$http', function($q, $http) {
-    var cache = null;
+    var cache;
 
     return {
         get: function () {
-            if (cache != null) {
+            if (cache) {
                 return $q.resolve(cache);
             }
 
-            return $http.get('config.json').then(function(config){
-                cache = config;
-                return config;
+            return $http.get('config.json').then(function(resp){
+                cache = resp.data;
+                return cache;
             });
         }
     };

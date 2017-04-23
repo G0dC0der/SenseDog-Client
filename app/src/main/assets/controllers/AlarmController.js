@@ -1,4 +1,4 @@
-function AlarmController($scope, $route, StorageService, AlarmService, DeviceService, ServerService) {
+function AlarmController($scope, $route, StorageService, AlarmService, DeviceService, ServerService, CloudService) {
     var alarmToken = StorageService.get('alarm-auth-token');
     var androidServiceRunning = AlarmService.isRunning();
 
@@ -8,14 +8,11 @@ function AlarmController($scope, $route, StorageService, AlarmService, DeviceSer
 
     if (alarmToken) {
         ServerService.status(alarmToken).then(function(status){
-            $scope.alarmServiceRunning = status.systemStatus === 'ACTIVE';
-
-            if ($scope.alarmServiceRunning && !androidServiceRunning) {
-                AlarmService.start();
-            } else if (!$scope.alarmServiceRunning && androidServiceRunning) {
-                AlarmService.stop();
-            }
-
+            AlarmService.start();
+            $scope.alarmServiceRunning = true;
+        }).then(null, function(err){
+            console.error("No service is running on server.", err); //Needs better error handling.
+        }).then(function(){
             $scope.loaded = true;
         });
     } else {
@@ -28,11 +25,12 @@ function AlarmController($scope, $route, StorageService, AlarmService, DeviceSer
     }
 
     $scope.start = function() {
+        $scope.loaded = false;
         AlarmService.start();
 
         if (!alarmToken) {
             ServerService.createService({
-                cloudToken: null,//TODO:
+                cloudToken: CloudService.getToken(),
                 deviceModel: DeviceService.deviceModel(),
                 osVersion: DeviceService.osVersion(),
                 appVersion: DeviceService.appVersion(),
@@ -43,24 +41,28 @@ function AlarmController($scope, $route, StorageService, AlarmService, DeviceSer
                 $scope.alarmServiceRunning = true;
                 $scope.pinCode = resp.pinCode;
             }).then(null, function(err){
+                console.error('Could not create alarm service.', err);
+                $scope.alarmServiceRunning = false;
+                $scope.pinCode = "-";
+                AlarmService.stop();
+            }).then(function(){
+                $scope.loaded = true;
+            });
+        } else {
+            ServerService.startService(alarmToken).then(function(){
+                $scope.alarmServiceRunning = true;
+            }).then(null, function(err) {
                 console.error('Could not start alarm service.', err);
                 $scope.alarmServiceRunning = false;
                 $scope.pinCode = "-";
                 AlarmService.stop();
-            });
-        } else {
-            ServerService.resume(alarmToken).then(function(){
-                $scope.alarmServiceRunning = true;
-            }).then(null, function(err) {
-                console.error('Could not resume alarm service.', err);
-                $scope.alarmServiceRunning = null;
-                $scope.pinCode = "-";
-                AlarmService.stop();
+            }).then(function(){
+                $scope.loaded = false;
             });
         }
     };
 
-    $scope.stop = function() {
+    $scope.destroy = function() {
         $route.reload();
     };
 }
@@ -72,4 +74,5 @@ angular.module('SenseDog').controller('AlarmController', [
     'AlarmService',
     'DeviceService',
     'ServerService',
+    'CloudService',
     AlarmController]);

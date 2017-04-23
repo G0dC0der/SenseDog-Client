@@ -18,10 +18,18 @@ import com.sensedog.sensor.unit.Direction;
 
 public class AlarmService extends Service {
 
+    private SensorManager manager;
+    private Sensor accelerometer;
+    private Sensor gravitymeter;
+    private Sensor magnetometer;
+    private RotationDetector rotationDetector;
+    private VibrationDetector vibrationDetector;
+    private MovementDetector movementDetector;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        final RotationDetector rotationDetector = new RotationDetector();
+        rotationDetector = new RotationDetector();
         rotationDetector.setThreshold(1.0f);
         rotationDetector.setDetectionCallback(new BiConsumer<Axis, Float>() {
             @Override
@@ -30,7 +38,7 @@ public class AlarmService extends Service {
             }
         });
 
-        final VibrationDetector vibrationDetector = new VibrationDetector();
+        vibrationDetector = new VibrationDetector();
         vibrationDetector.setThreshold(10);
         vibrationDetector.setCallback(new Consumer<Float>() {
             @Override
@@ -39,7 +47,7 @@ public class AlarmService extends Service {
             }
         });
 
-        final MovementDetector movementDetector = new MovementDetector();
+        movementDetector = new MovementDetector();
         movementDetector.setCallback(new Consumer<Direction>() {
             @Override
             public void consume(Direction direction) {
@@ -47,10 +55,10 @@ public class AlarmService extends Service {
             }
         });
 
-        final SensorManager manager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        final Sensor accelerometer = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        final Sensor gravitymeter = manager.getDefaultSensor(Sensor.TYPE_GRAVITY);
-        final Sensor magnetometer = manager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        manager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accelerometer = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        gravitymeter = manager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        magnetometer = manager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         manager.registerListener(rotationDetector, accelerometer, SensorManager.SENSOR_DELAY_UI);
         manager.registerListener(vibrationDetector, accelerometer, SensorManager.SENSOR_DELAY_UI);
@@ -58,6 +66,17 @@ public class AlarmService extends Service {
         manager.registerListener(movementDetector, magnetometer, SensorManager.SENSOR_DELAY_UI);
 
         return null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (manager != null) {
+            manager.unregisterListener(rotationDetector, accelerometer);
+            manager.unregisterListener(vibrationDetector, accelerometer);
+            manager.unregisterListener(movementDetector, gravitymeter);
+            manager.unregisterListener(movementDetector, magnetometer);
+        }
     }
 
     private void detect(DetectType detectType, Object value) {
