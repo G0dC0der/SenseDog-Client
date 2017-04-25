@@ -7,7 +7,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.sensedog.persistance.AssetLoader;
 import com.sensedog.persistance.DictionaryStorage;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -16,18 +18,19 @@ import java.util.Map;
 public class TokenHandler extends FirebaseInstanceIdService {
 
     private DictionaryStorage storage;
+    private String baseUrl;
 
     @Override
-    public void onTokenRefresh() { //TODO: Read config from asset config file
+    public void onTokenRefresh() {
         final String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         System.out.print("Refreshed token: " + refreshedToken);
 
-        /*
-         * Final decision: When this method is called, check if an auth-token is available. If it is, save it to server. If not, we expect the web app to do it.
-         * This means the wep app will only do it once(e.g when it creates a NEW service).
-         */
         if (storage == null) {
             storage = new DictionaryStorage(this);
+        }
+
+        if (baseUrl == null) {
+            baseUrl = readBaseUrl();
         }
 
         Map<String, String> payload = new HashMap<>();
@@ -39,7 +42,7 @@ public class TokenHandler extends FirebaseInstanceIdService {
             headers.put("alarm-auth-token", alarmToken);
 
             Volley.newRequestQueue(this).add(new PostRequest(
-                    "http://localhost:8080/sensedog/alarm/update/cloud",
+                    baseUrl + "/alarm/update/cloud",
                     new JSONObject(payload),
                     headers));
         } else {
@@ -49,10 +52,18 @@ public class TokenHandler extends FirebaseInstanceIdService {
                 headers.put("master-auth-token", masterToken);
 
                 Volley.newRequestQueue(this).add(new PostRequest(
-                        "http://localhost:8080/sensedog/master/update/cloud",
+                        baseUrl + "/master/update/cloud",
                         new JSONObject(payload),
                         headers));
             }
+        }
+    }
+
+    private String readBaseUrl() {
+        try {
+            return new AssetLoader(this).loadJson("config.json").getString("baseUrl");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
     }
 
