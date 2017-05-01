@@ -18,12 +18,9 @@ public class AssetLoader {
     public JSONObject loadJson(String filename) {
         String json;
 
-        try {
-            InputStream is = context.getAssets().open(filename);
-            int size = is.available();
-            byte[] buffer = new byte[size];
+        try (InputStream is = context.getAssets().open(filename)){
+            byte[] buffer = new byte[is.available()];
             is.read(buffer);
-            is.close();
             json = new String(buffer, "UTF-8");
         } catch (IOException e) {
             throw new RuntimeException(e);

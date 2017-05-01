@@ -101,6 +101,11 @@ public class AlarmService extends Service {
     }
 
     private void detect(DetectType detectType, Object value) {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.out.println(detectType + ": " + value);
         //Some logics if it's rejected.
 

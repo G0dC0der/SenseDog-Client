@@ -47,6 +47,26 @@ angular.module("SenseDog").factory("ServerService", ["$q", "$http", "Configurati
                     return resp.data;
                 });
             });
+        },
+        register: function(registerData) {
+            return ConfigurationService.get().then(function(config){
+                return $http({
+                    "method": "POST",
+                    "url": config.baseUrl + "/master/new",
+                    "data": JSON.stringify(registerData)
+                }).then(function(resp){
+                });
+            });
+        },
+        login: function(loginData) {
+            return ConfigurationService.get().then(function(config){
+                return $http({
+                    "method": "POST",
+                    "url": config.baseUrl + "/master/login",
+                    "data": JSON.stringify(loginData)
+                }).then(function(resp){
+                });
+            });
         }
     };
 }]);

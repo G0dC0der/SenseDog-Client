@@ -6,6 +6,9 @@ angular.module('SenseDog', ['ngRoute']).config(function($routeProvider) {
     .when("/alarm", {
         templateUrl : "pages/alarm.html"
     })
+    .when("/register", {
+        templateUrl : "pages/register.html"
+    })
     .when("/master", {
         templateUrl : "pages/master.html"
     });

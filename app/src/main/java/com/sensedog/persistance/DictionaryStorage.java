@@ -36,15 +36,20 @@ public class DictionaryStorage extends SQLiteOpenHelper {
     }
 
     public String get(String key) {
+        SQLiteDatabase db = null;
         Cursor result = null;
         try {
-            result = getReadableDatabase().rawQuery("SELECT value FROM dictionary WHERE key = ? ", new String[]{key});
+            db = getReadableDatabase();
+            result = db.rawQuery("SELECT value FROM dictionary WHERE key = ? ", new String[]{key});
             if (result.getCount() > 0) {
                 result.moveToFirst();
                 return result.getString(result.getColumnIndex("value"));
             }
             return null;
         } finally {
+            if (db != null) {
+                db.close();
+            }
             if (result != null) {
                 result.close();
             }
@@ -52,6 +57,14 @@ public class DictionaryStorage extends SQLiteOpenHelper {
     }
 
     public void remove(String key) {
-        getWritableDatabase().execSQL(String.format("DELETE FROM dictionary WHERE key = '%S'", key));
+        SQLiteDatabase db = null;
+        try {
+            db = getReadableDatabase();
+            db.execSQL("DELETE FROM dictionary WHERE key = '" + key + "'");
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
     }
 }

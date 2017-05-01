@@ -4,7 +4,7 @@ angular.module("SenseDog").directive('appReset', ['$location', 'StorageService',
         controller: function($scope){
             $scope.clear = function(){
                 StorageService.remove('alarm-auth-token');
-                StorageService.remove('master-auth-token');
+                StorageService.remove('master-email');
 
                 if (AlarmService.isRunning()) {
                     AlarmService.stop();
