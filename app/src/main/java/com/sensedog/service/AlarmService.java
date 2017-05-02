@@ -7,9 +7,12 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import com.android.volley.toolbox.Volley;
+import com.sensedog.ServerClient;
 import com.sensedog.function.BiConsumer;
 import com.sensedog.function.Consumer;
 import com.sensedog.persistance.AssetLoader;
+import com.sensedog.persistance.DictionaryStorage;
 import com.sensedog.sensor.MovementDetector;
 import com.sensedog.sensor.RotationDetector;
 import com.sensedog.sensor.VibrationDetector;
@@ -18,6 +21,9 @@ import com.sensedog.sensor.unit.DetectType;
 import com.sensedog.sensor.unit.Direction;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AlarmService extends Service {
 
@@ -28,6 +34,7 @@ public class AlarmService extends Service {
     private RotationDetector rotationDetector;
     private VibrationDetector vibrationDetector;
     private MovementDetector movementDetector;
+    private DictionaryStorage storage;
     private String baseUrl;
 
     @Nullable
@@ -43,6 +50,7 @@ public class AlarmService extends Service {
         super.onCreate();
 
         baseUrl = readBaseUrl();
+        storage = new DictionaryStorage(this);
 
         rotationDetector = new RotationDetector();
         rotationDetector.setThreshold(1.0f);
@@ -101,14 +109,21 @@ public class AlarmService extends Service {
     }
 
     private void detect(DetectType detectType, Object value) {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        String authToken = storage.get("alarm-auth-token");
+        if (authToken == null) {
+            return;
         }
-        System.out.println(detectType + ": " + value);
-        //Some logics if it's rejected.
 
-        //Check the reason. If it's no master or that the status is stopped, sleep for a minute.
+        Map<String, String> headers = new HashMap<>();
+        headers.put("alarm-auth-token", authToken);
+
+        Map<String, String> payload = new HashMap<>();
+        payload.put("detectionType", detectType.name());
+        payload.put("value", value.toString());
+
+        Volley.newRequestQueue(this).add(new ServerClient.PostRequest(
+                baseUrl + "/alarm/detection",
+                new JSONObject(payload),
+                headers));
     }
 }

@@ -41,7 +41,7 @@ public class VibrationDetector implements SensorEventListener {
 
             float shakeSpeed = Math.abs(x+y+z - prevX - prevY - prevZ) / diffTime * 10000;
 
-            callback.consume(shakeSpeed > threshold ? shakeSpeed : null);
+            callback.consume(shakeSpeed > threshold ? shakeSpeed : 0.0f);
 
             prevX = x;
             prevY = y;

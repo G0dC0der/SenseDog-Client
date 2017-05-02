@@ -38,7 +38,8 @@ function AlarmController($scope, $route, StorageService, AlarmService, DeviceSer
                 osVersion: DeviceService.osVersion(),
                 appVersion: DeviceService.appVersion(),
                 carrier: DeviceService.carrier(),
-                battery: DeviceService.battery()
+                battery: DeviceService.battery(),
+                serviceName: $scope.serviceName
             }).then(function(resp) {
                 StorageService.put('alarm-auth-token', resp.alarmAuthToken);
                 $scope.alarmServiceRunning = true;

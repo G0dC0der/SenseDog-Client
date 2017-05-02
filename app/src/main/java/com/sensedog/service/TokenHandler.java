@@ -7,6 +7,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.sensedog.ServerClient;
 import com.sensedog.persistance.AssetLoader;
 import com.sensedog.persistance.DictionaryStorage;
 import org.json.JSONException;
@@ -41,7 +42,7 @@ public class TokenHandler extends FirebaseInstanceIdService {
             Map<String, String> headers = new HashMap<>();
             headers.put("alarm-auth-token", alarmToken);
 
-            Volley.newRequestQueue(this).add(new PostRequest(
+            Volley.newRequestQueue(this).add(new ServerClient.PostRequest(
                     baseUrl + "/alarm/update/cloud",
                     new JSONObject(payload),
                     headers));
@@ -51,7 +52,7 @@ public class TokenHandler extends FirebaseInstanceIdService {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("master-auth-token", masterToken);
 
-                Volley.newRequestQueue(this).add(new PostRequest(
+                Volley.newRequestQueue(this).add(new ServerClient.PostRequest(
                         baseUrl + "/master/update/cloud",
                         new JSONObject(payload),
                         headers));
@@ -66,35 +67,4 @@ public class TokenHandler extends FirebaseInstanceIdService {
             throw new RuntimeException(e);
         }
     }
-
-    private static final class PostRequest extends JsonObjectRequest {
-
-        Map<String, String> headers = new HashMap<>();
-
-        PostRequest(String url,
-                    JSONObject jsonRequest,
-                    Map<String, String> headers) {
-            super(Method.POST, url, jsonRequest, DEFAULT_LISTENER, DEFAULT_ERROR_LISTENER);
-            this.headers = headers;
-        }
-
-        @Override
-        public Map<String, String> getHeaders() throws AuthFailureError {
-            return headers;
-        }
-    };
-
-    private static final Response.Listener<JSONObject> DEFAULT_LISTENER = new Response.Listener<JSONObject>() {
-        @Override
-        public void onResponse(JSONObject response) {
-            System.out.println("Updated cloud token.");
-        }
-    };
-
-    private static final Response.ErrorListener DEFAULT_ERROR_LISTENER = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            System.out.println("Failed to update token.");
-        }
-    };
 }
